@@ -1,0 +1,24 @@
+name: test
+
+on:
+  push:
+    branches:
+    - master
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set version number
+      run: |
+        if ($null -eq ${{ vars.BASE_VERSION_NUMBER }}) {
+          $version = ${{ github.run_number }}
+        } else {
+          $version = ${{ vars.BASE_VERSION_NUMBER }} + ${{ github.run_number }}
+        }
+        echo "VERSION_NUMBER=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+
+    - name: Environment variables to output 
+      id: init
+      run: echo "VERSION_NUMBER=${{ env.VERSION_NUMBER }}" >> $GITHUB_OUTPUT
