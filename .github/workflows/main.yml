@@ -10,15 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set version number
+    - name: Determine version number
+      id: version
+      shell: bash
       run: |
-        if ($null -eq ${{ vars.BASE_VERSION_NUMBER }}) {
-          $version = ${{ github.run_number }}
-        } else {
-          $version = ${{ vars.BASE_VERSION_NUMBER }} + ${{ github.run_number }}
-        }
-        echo "VERSION_NUMBER=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        if [ "${{ vars.BASE_VERSION_NUMBER }}" != '']; then
+          echo "value=${{ vars.BASE_VERSION_NUMBER }} + ${{ github.run_number }}" >> $GITHUB_OUTPUT;
+        else
+          echo "value=${{ github.run_number }}" >> $GITHUB_OUTPUT;
+        fi
 
     - name: Environment variables to output 
       id: init
-      run: echo "VERSION_NUMBER=${{ env.VERSION_NUMBER }}" >> $GITHUB_OUTPUT
+      run: echo "version=${{ steps.version.outputs.value }}" >> $GITHUB_OUTPUT
