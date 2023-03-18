@@ -14,8 +14,8 @@ jobs:
       id: version
       shell: bash
       run: |
-        if [ "${{ vars.BASE_VERSION_NUMBER }}" != '']; then
-          echo "value=${{ vars.BASE_VERSION_NUMBER }} + ${{ github.run_number }}" >> $GITHUB_OUTPUT;
+        if [ "${{ vars.BASE_VERSION_NUMBER }}" != '' ]; then
+          echo "value=$(${{ vars.BASE_VERSION_NUMBER }} + ${{ github.run_number }})" >> $GITHUB_OUTPUT;
         else
           echo "value=${{ github.run_number }}" >> $GITHUB_OUTPUT;
         fi
